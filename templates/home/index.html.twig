@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - Nike Shop{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">Nos Catégories</h1>
+    <div class="row">
+        {% for category in categories %}
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ category.name }}</h5>
+                        <p class="card-text">{{ category.description|slice(0, 80) ~ '...' }}</p>
+                        <a href="{{ path('app_category', { id: category.id }) }}" class="btn btn-dark">Voir produits</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-warning">Aucune catégorie disponible.</div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
