@@ -1,29 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ category.name }} - Nike Shop{% endblock %}
+{% block title %}{{ category.name }}{% endblock %}
 
 {% block body %}
-<div class="container mt-5">
-    <h1 class="mb-4 text-center">{{ category.name }}</h1>
-    <p class="text-center text-muted">{{ category.description }}</p>
+    <h1>Produits dans la catégorie : {{ category.name }}</h1>
 
-    <div class="row">
+    <ul>
         {% for product in products %}
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <div class="card-body d-flex flex-column justify-content-between">
-                        <h5 class="card-title">{{ product.name }}</h5>
-                        <p class="card-text">{{ product.description|slice(0, 100) ~ '...' }}</p>
-                        <p class="fw-bold">{{ product.priceHT }} € HT</p>
-                        <a href="#" class="btn btn-outline-dark mt-auto">Ajouter au panier</a>
-                    </div>
-                </div>
-            </div>
+            <li>
+                <a href="{{ path('product_show', {id: product.id}) }}">
+                    {{ product.name }} - {{ product.price|number_format(2, '.', ' ') }} €
+                </a>
+            </li>
         {% else %}
-            <div class="col-12">
-                <div class="alert alert-info">Aucun produit dans cette catégorie.</div>
-            </div>
+            <li>Aucun produit trouvé.</li>
         {% endfor %}
-    </div>
-</div>
+    </ul>
 {% endblock %}

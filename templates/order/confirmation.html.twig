@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirmation de commande{% endblock %}
+
+{% block body %}
+    <h1>Merci pour votre commande</h1>
+
+    <p>Numéro de commande : <strong>{{ order.orderNumber }}</strong></p>
+    <p>Date : {{ order.dateTime|date('d/m/Y H:i') }}</p>
+
+    <h2>Détail de la commande</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Quantité</th>
+                <th>Prix unitaire</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% set total = 0 %}
+        {% for line in order.commandLines %}
+            <tr>
+                <td>{{ line.product.name }}</td>
+                <td>{{ line.quantity }}</td>
+                <td>{{ line.product.price|number_format(2, '.', ' ') }} €</td>
+                <td>{{ (line.product.price * line.quantity)|number_format(2, '.', ' ') }} €</td>
+            </tr>
+            {% set total = total + (line.product.price * line.quantity) %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <p><strong>Total à payer :</strong> {{ total|number_format(2, '.', ' ') }} €</p>
+    <p>Nous vous enverrons une confirmation par e-mail.</p>
+{% endblock %}

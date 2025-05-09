@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes commandes{% endblock %}
+
+{% block body %}
+    <h1>Historique de mes commandes</h1>
+
+    {% if orders is empty %}
+        <p>Vous n'avez passé aucune commande pour le moment.</p>
+    {% else %}
+        <table>
+            <thead>
+                <tr>
+                    <th>N° commande</th>
+                    <th>Date</th>
+                    <th>Statut</th>
+                    <th>Détail</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td>{{ order.orderNumber }}</td>
+                    <td>{{ order.dateTime|date('d/m/Y H:i') }}</td>
+                    <td>{{ order.valid ? 'Validée' : 'En attente' }}</td>
+                    <td>
+                        <a href="{{ path('order_create') }}?ref={{ order.orderNumber }}">Voir</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

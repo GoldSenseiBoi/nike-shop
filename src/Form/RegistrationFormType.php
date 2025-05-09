@@ -19,32 +19,18 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('firstName', null, [
-                'label' => 'Prénom'
-            ])
-            ->add('lastName', null, [
-                'label' => 'Nom'
-            ])
-            ->add('phone', TelType::class, [
-                'label' => 'Téléphone'
-            ])
-            ->add('email', null, [
-                'label' => 'Email'
-            ])
+            ->add('firstName', null, ['label' => 'Prénom'])
+            ->add('lastName', null, ['label' => 'Nom'])
+            ->add('phone', TelType::class, ['label' => 'Téléphone'])
+            ->add('email', null, ['label' => 'Email'])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'first_options'  => [
-                    'label' => 'Mot de passe'
-                ],
-                'second_options' => [
-                    'label' => 'Confirmez le mot de passe'
-                ],
+                'first_options' => ['label' => 'Mot de passe'],
+                'second_options' => ['label' => 'Confirmez le mot de passe'],
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'Veuillez entrer un mot de passe',
-                    ]),
+                    new NotBlank(['message' => 'Veuillez entrer un mot de passe']),
                     new Length([
                         'min' => 6,
                         'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères',
@@ -56,9 +42,7 @@ class RegistrationFormType extends AbstractType
                 'label' => "J'accepte les conditions",
                 'mapped' => false,
                 'constraints' => [
-                    new IsTrue([
-                        'message' => 'Vous devez accepter les conditions.',
-                    ]),
+                    new IsTrue(['message' => 'Vous devez accepter les conditions.']),
                 ],
             ]);
     }

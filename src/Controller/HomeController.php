@@ -2,38 +2,50 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
+use App\Entity\Product;
 use App\Repository\CategoryRepository;
+use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
-    public function index(CategoryRepository $categoryRepository): Response
+    #[Route('/', name: 'entry_point')]
+    public function entry(): Response
     {
-        $categories = $categoryRepository->findAll();
+        if ($this->getUser()) {
+            return $this->redirectToRoute('accueil');
+        }
+
+        return $this->redirectToRoute('app_login');
+    }
+
+    #[Route('/accueil', name: 'accueil')]
+    public function index(CategoryRepository $categoryRepo): Response
+    {
+        $categories = $categoryRepo->findAll();
 
         return $this->render('home/index.html.twig', [
             'categories' => $categories,
         ]);
     }
 
-    #[Route('/category/{id}', name: 'app_category')]
-    public function category(int $id, CategoryRepository $categoryRepository): Response
+    #[Route('/categorie/{id}', name: 'category_show')]
+    public function showCategory(Category $category): Response
     {
-        $category = $categoryRepository->find($id);
-
-        if (!$category) {
-            throw $this->createNotFoundException('Catégorie non trouvée');
-        }
-
-        $products = $category->getProducts(); // relation OneToMany dans l'entité Category
-
         return $this->render('home/category.html.twig', [
             'category' => $category,
-            'products' => $products,
+            'products' => $category->getProducts(),
         ]);
     }
 
+    #[Route('/produit/{id}', name: 'product_show')]
+    public function showProduct(Product $product): Response
+    {
+        return $this->render('home/product.html.twig', [
+            'product' => $product,
+        ]);
+    }
 }
