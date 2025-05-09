@@ -37,6 +37,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $isVerified = false;
+
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?CustomerAddress $customerAddress = null;
 
@@ -144,6 +147,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->customerAddress = $customerAddress;
         return $this;
     }
+
+    public function isVerified(): bool
+{
+    return $this->isVerified;
+}
+
+public function setIsVerified(bool $isVerified): static
+{
+    $this->isVerified = $isVerified;
+    return $this;
+}
 
     /**
      * @return Collection<int, Order>
