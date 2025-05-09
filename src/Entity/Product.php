@@ -90,7 +90,7 @@ class Product
         return $this;
     }
 
-    public function isAvailable(): ?bool
+    public function getAvailable(): ?bool
     {
         return $this->available;
     }
@@ -170,5 +170,11 @@ class Product
         }
 
         return $this;
+    }
+
+    // ✅ Méthode ajoutée pour rendre compatible avec {{ product.price }} en Twig
+    public function getPrice(): ?float
+    {
+        return $this->priceHT;
     }
 }

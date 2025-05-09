@@ -3,14 +3,38 @@
 {% block title %}Bienvenue sur la boutique{% endblock %}
 
 {% block body %}
-    <h1>Bienvenue {{ app.user.email }}</h1>
+<div class="welcome max-w-7xl mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-2">Bienvenue {{ app.user.email }}</h1>
+    <p class="text-lg text-gray-600 mb-6">Découvre nos catégories :</p>
 
-    <p>Explore nos catégories :</p>
-    <ul>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {% for category in categories %}
-            <li><a href="{{ path('category_show', {id: category.id}) }}">{{ category.name }}</a></li>
+            <a href="{{ path('category_show', {id: category.id}) }}"
+               class="block p-6 border rounded-2xl shadow hover:shadow-lg transition">
+                <h2 class="text-xl font-semibold text-gray-800">{{ category.name }}</h2>
+            </a>
         {% endfor %}
-    </ul>
+    </div>
 
-    <p><a href="{{ path('app_logout') }}">Déconnexion</a></p>
+    <div class="mt-12">
+        <h2 class="text-2xl font-bold mb-4">Produits phares</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            {% for product in featured_products %}
+                <div class="border p-4 rounded-2xl shadow hover:shadow-lg transition">
+                    <h3 class="text-lg font-semibold mb-2">{{ product.name }}</h3>
+                    <p class="text-sm text-gray-500 mb-2">
+                        {{ product.description[:100] ~ '...' }}
+                    </p>
+                    <p class="text-base font-bold">{{ product.price }} €</p>
+                    <a href="{{ path('product_show', {id: product.id}) }}"
+                       class="inline-block mt-2 text-blue-600 hover:underline">Voir</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <p class="mt-12 text-center">
+        <a href="{{ path('app_logout') }}" class="text-red-500 underline">Se déconnecter</a>
+    </p>
+</div>
 {% endblock %}

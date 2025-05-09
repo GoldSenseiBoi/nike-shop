@@ -23,12 +23,14 @@ class HomeController extends AbstractController
     }
 
     #[Route('/accueil', name: 'accueil')]
-    public function index(CategoryRepository $categoryRepo): Response
+    public function index(CategoryRepository $categoryRepo, ProductRepository $productRepo): Response
     {
         $categories = $categoryRepo->findAll();
+        $featuredProducts = $productRepo->findBy([], null, 4); // 4 produits aléatoires
 
         return $this->render('home/index.html.twig', [
             'categories' => $categories,
+            'featured_products' => $featuredProducts,
         ]);
     }
 
