@@ -2,25 +2,24 @@
 
 namespace App\Form;
 
-use App\Entity\Category;
 use App\Entity\Media;
+use App\Entity\Product;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CategoryType extends AbstractType
+class MediaType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('description')
-            ->add('media', EntityType::class, [
-                'class' => Media::class,
-                'choice_label' => 'alt',
-                'placeholder' => 'Sélectionnez une image',
-                'required' => false,
+            ->add('type')
+            ->add('path')
+            ->add('alt')
+            ->add('product', EntityType::class, [
+                'class' => Product::class,
+                'choice_label' => 'id',
             ])
         ;
     }
@@ -28,7 +27,7 @@ class CategoryType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Category::class,
+            'data_class' => Media::class,
         ]);
     }
 }
