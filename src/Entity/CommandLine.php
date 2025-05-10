@@ -22,6 +22,9 @@ class CommandLine
     #[ORM\ManyToOne(inversedBy: 'commandLines')]
     private ?Product $product = null;
 
+    #[ORM\ManyToOne]
+    private ?Size $size = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -57,6 +60,17 @@ class CommandLine
     public function setProduct(?Product $product): static
     {
         $this->product = $product;
+        return $this;
+    }
+
+    public function getSize(): ?Size
+    {
+        return $this->size;
+    }
+
+    public function setSize(?Size $size): static
+    {
+        $this->size = $size;
         return $this;
     }
 }

@@ -26,18 +26,20 @@ class OrderController extends AbstractController
         $user = $this->getUser();
         $order = new Order();
         $order->setUser($user);
-        $order->setValid(false); // par défaut non validée
+        $order->setValid(false);
         $order->setDateTime(new \DateTime());
         $order->setOrderNumber(uniqid('CMD-'));
 
         foreach ($cart as $line) {
             $product = $line['product'];
             $quantity = $line['quantity'];
+            $size = $line['size'] ?? null;
 
             $orderLine = new CommandLine();
             $orderLine->setProduct($product);
             $orderLine->setQuantity($quantity);
             $orderLine->setOrder($order);
+            $orderLine->setSize($size);
 
             $em->persist($orderLine);
             $order->addCommandLine($orderLine);
