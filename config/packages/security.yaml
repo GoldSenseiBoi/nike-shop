@@ -1,4 +1,3 @@
-# config/packages/security.yaml
 security:
     password_hashers:
         App\Entity\User: 'auto'
@@ -28,8 +27,8 @@ security:
                 path: /
 
     access_control:
-        - { path: ^/accueil, roles: ROLE_USER }
         - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/accueil, roles: ROLE_USER }
         - { path: ^/order, roles: ROLE_USER }
         - { path: ^/cart, roles: ROLE_USER }
         - { path: ^/login, roles: PUBLIC_ACCESS }

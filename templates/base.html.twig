@@ -23,6 +23,11 @@
                 <a href="{{ path('accueil') }}" class="hover:underline">Accueil</a>
                 <a href="{{ path('cart_view') }}" class="hover:underline">Panier</a>
                 <a href="{{ path('order_list') }}" class="hover:underline">Commandes</a>
+
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('admin_dashboard') }}" class="hover:underline">🔧 Admin</a>
+                {% endif %}
+
                 <a href="{{ path('app_logout') }}" class="text-red-400 hover:underline">Déconnexion</a>
             </div>
         </div>
