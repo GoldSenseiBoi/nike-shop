@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Entity\Size;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 
 class CartController extends AbstractController
 {
@@ -33,18 +35,32 @@ class CartController extends AbstractController
     }
 
     #[Route('/cart/add/{id}', name: 'cart_add')]
-    public function add(Product $product, Request $request, SessionInterface $session): Response
+    public function add(Product $product, Request $request, SessionInterface $session, EntityManagerInterface $em): Response
     {
-        $cart = $session->get('cart', []);
         $quantity = (int) $request->query->get('quantity', 1);
-        $productId = $product->getId();
+        $sizeId = (int) $request->query->get('size');
 
-        if (isset($cart[$productId])) {
-            $cart[$productId]['quantity'] += $quantity;
+        if (!$sizeId) {
+            $this->addFlash('error', 'Veuillez sélectionner une taille.');
+            return $this->redirectToRoute('product_show', ['id' => $product->getId()]);
+        }
+
+        $size = $em->getRepository(Size::class)->find($sizeId);
+        if (!$size || !$product->getSizes()->contains($size)) {
+            $this->addFlash('error', 'Taille invalide pour ce produit.');
+            return $this->redirectToRoute('product_show', ['id' => $product->getId()]);
+        }
+
+        $cart = $session->get('cart', []);
+        $key = $product->getId() . '_' . $size->getId();
+
+        if (isset($cart[$key])) {
+            $cart[$key]['quantity'] += $quantity;
         } else {
-            $cart[$productId] = [
+            $cart[$key] = [
                 'product' => $product,
-                'quantity' => $quantity
+                'size' => $size,
+                'quantity' => $quantity,
             ];
         }
 
@@ -53,15 +69,15 @@ class CartController extends AbstractController
         return $this->redirectToRoute('cart_view');
     }
 
-    #[Route('/cart/update/{id}', name: 'cart_update')]
-    public function update(Product $product, Request $request, SessionInterface $session): Response
+    #[Route('/cart/update/{id}/{size}', name: 'cart_update')]
+    public function update(Product $product, Size $size, Request $request, SessionInterface $session): Response
     {
         $cart = $session->get('cart', []);
         $quantity = max((int) $request->request->get('quantity', 1), 1);
-        $productId = $product->getId();
+        $key = $product->getId() . '_' . $size->getId();
 
-        if (isset($cart[$productId])) {
-            $cart[$productId]['quantity'] = $quantity;
+        if (isset($cart[$key])) {
+            $cart[$key]['quantity'] = $quantity;
         }
 
         $session->set('cart', $cart);
@@ -69,14 +85,14 @@ class CartController extends AbstractController
         return $this->redirectToRoute('cart_view');
     }
 
-    #[Route('/cart/remove/{id}', name: 'cart_remove')]
-    public function remove(Product $product, SessionInterface $session): Response
+    #[Route('/cart/remove/{id}/{size}', name: 'cart_remove')]
+    public function remove(Product $product, Size $size, SessionInterface $session): Response
     {
         $cart = $session->get('cart', []);
-        $productId = $product->getId();
+        $key = $product->getId() . '_' . $size->getId();
 
-        if (isset($cart[$productId])) {
-            unset($cart[$productId]);
+        if (isset($cart[$key])) {
+            unset($cart[$key]);
         }
 
         $session->set('cart', $cart);

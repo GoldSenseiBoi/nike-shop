@@ -43,10 +43,17 @@ class Product
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: CommandLine::class, cascade: ['persist', 'remove'])]
     private Collection $commandLines;
 
+    /**
+     * @var Collection<int, Size>
+     */
+    #[ORM\ManyToMany(targetEntity: Size::class, inversedBy: 'products')]
+    private Collection $sizes;
+
     public function __construct()
     {
         $this->media = new ArrayCollection();
         $this->commandLines = new ArrayCollection();
+        $this->sizes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -176,5 +183,29 @@ class Product
     public function getPrice(): ?float
     {
         return $this->priceHT;
+    }
+
+    /**
+     * @return Collection<int, Size>
+     */
+    public function getSizes(): Collection
+    {
+        return $this->sizes;
+    }
+
+    public function addSize(Size $size): static
+    {
+        if (!$this->sizes->contains($size)) {
+            $this->sizes->add($size);
+        }
+
+        return $this;
+    }
+
+    public function removeSize(Size $size): static
+    {
+        $this->sizes->removeElement($size);
+
+        return $this;
     }
 }

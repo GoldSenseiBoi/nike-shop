@@ -3,17 +3,22 @@
 {% block title %}{{ category.name }}{% endblock %}
 
 {% block body %}
-    <h1>Produits dans la catégorie : {{ category.name }}</h1>
+<div class="max-w-7xl mx-auto px-4">
+    <h1 class="text-3xl font-bold mb-6">Catégorie : {{ category.name }}</h1>
 
-    <ul>
-        {% for product in products %}
-            <li>
-                <a href="{{ path('product_show', {id: product.id}) }}">
-                    {{ product.name }} - {{ product.price|number_format(2, '.', ' ') }} €
+    {% if products|length > 0 %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {% for product in products %}
+                <a href="{{ path('product_show', {id: product.id}) }}"
+                   class="block border p-6 rounded-2xl shadow hover:shadow-lg transition">
+                    <h2 class="text-xl font-semibold">{{ product.name }}</h2>
+                    <p class="text-sm text-gray-500 mt-1 mb-2">{{ product.description[:80] ~ '...' }}</p>
+                    <p class="text-base font-bold">{{ product.price|number_format(2, '.', ' ') }} €</p>
                 </a>
-            </li>
-        {% else %}
-            <li>Aucun produit trouvé.</li>
-        {% endfor %}
-    </ul>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Aucun produit trouvé dans cette catégorie.</p>
+    {% endif %}
+</div>
 {% endblock %}

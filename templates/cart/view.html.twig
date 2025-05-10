@@ -3,44 +3,57 @@
 {% block title %}Mon Panier{% endblock %}
 
 {% block body %}
-<h1>Mon Panier</h1>
+<h1 class="text-2xl font-bold mb-6">Mon Panier</h1>
 
 {% if cart is empty %}
     <p>Votre panier est vide.</p>
 {% else %}
-    <table>
+    <table class="table-auto w-full text-left border">
         <thead>
-            <tr>
-                <th>Produit</th>
-                <th>Quantité</th>
-                <th>Prix unitaire</th>
-                <th>Montant</th>
-                <th>Actions</th>
+            <tr class="bg-gray-100">
+                <th class="p-2 border">Produit</th>
+                <th class="p-2 border">Taille</th>
+                <th class="p-2 border">Quantité</th>
+                <th class="p-2 border">Prix unitaire</th>
+                <th class="p-2 border">Montant</th>
+                <th class="p-2 border">Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for id, line in cart %}
             <tr>
-                <td>{{ line.product.name }}</td>
-                <td>
-                    <form action="{{ path('cart_update', {'id': line.product.id}) }}" method="post">
-                        <input type="number" name="quantity" value="{{ line.quantity }}" min="1" style="width: 60px;">
-                        <button type="submit">Mettre à jour</button>
+                <td class="p-2 border">{{ line.product.name }}</td>
+                <td class="p-2 border">{{ line.size.label }}</td>
+                <td class="p-2 border">
+                    <form action="{{ path('cart_update', {
+                        'id': line.product.id,
+                        'size': line.size.id
+                    }) }}" method="post" class="flex items-center gap-2">
+                        <input type="number" name="quantity" value="{{ line.quantity }}" min="1" style="width: 60px;" class="border px-2 py-1 rounded">
+                        <button type="submit" class="text-sm bg-gray-200 px-2 py-1 rounded hover:bg-gray-300">↻</button>
                     </form>
                 </td>
-                <td>{{ line.product.price|number_format(2, '.', ' ') }} €</td>
-                <td>{{ (line.product.price * line.quantity)|number_format(2, '.', ' ') }} €</td>
-                <td>
-                    <a href="{{ path('cart_remove', {'id': line.product.id}) }}">Supprimer</a>
+                <td class="p-2 border">{{ line.product.price|number_format(2, '.', ' ') }} €</td>
+                <td class="p-2 border">{{ (line.product.price * line.quantity)|number_format(2, '.', ' ') }} €</td>
+                <td class="p-2 border">
+                    <a href="{{ path('cart_remove', {
+                        'id': line.product.id,
+                        'size': line.size.id
+                    }) }}" class="text-red-500 hover:underline">Supprimer</a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <p><strong>Total produits :</strong> {{ total|number_format(2, '.', ' ') }} €</p>
-    <p><strong>Frais de port :</strong> {{ transport|number_format(2, '.', ' ') }} €</p>
-    <p><strong>Total général :</strong> {{ grand_total|number_format(2, '.', ' ') }} €</p>
-    <a href="{{ path('app_login') }}">Passer commande</a>
+    <div class="mt-6 space-y-2">
+        <p><strong>Total produits :</strong> {{ total|number_format(2, '.', ' ') }} €</p>
+        <p><strong>Frais de port :</strong> {{ transport|number_format(2, '.', ' ') }} €</p>
+        <p><strong>Total général :</strong> {{ grand_total|number_format(2, '.', ' ') }} €</p>
+    </div>
+
+    <a href="{{ path('app_login') }}" class="inline-block mt-4 bg-black text-white px-4 py-2 rounded hover:bg-gray-900">
+        Passer commande
+    </a>
 {% endif %}
 {% endblock %}
