@@ -4,8 +4,11 @@ namespace App\Entity;
 
 use App\Repository\MediaRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Doctrine\ORM\Mapping\PrePersist;
 
 #[ORM\Entity(repositoryClass: MediaRepository::class)]
+#[HasLifecycleCallbacks]
 class Media
 {
     #[ORM\Id]
@@ -24,6 +27,14 @@ class Media
 
     #[ORM\ManyToOne(inversedBy: 'media')]
     private ?Product $product = null;
+
+    #[PrePersist]
+    public function setDefaultType(): void
+    {
+        if ($this->type === null) {
+            $this->type = 'image/jpeg';
+        }
+    }
 
     public function getId(): ?int
     {
@@ -49,10 +60,16 @@ class Media
 
     public function setPath(string $path): static
     {
+        // Si l'image ne contient pas déjà "/images/", on l'ajoute
+        if (!str_starts_with($path, '/images/')) {
+            $path = '/images/' . ltrim($path, '/');
+        }
+
         $this->path = $path;
 
         return $this;
     }
+
 
     public function getAlt(): ?string
     {
@@ -76,5 +93,10 @@ class Media
         $this->product = $product;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->alt ?? 'Image';
     }
 }

@@ -56,10 +56,24 @@ class Product
         $this->sizes = new ArrayCollection();
     }
 
-    public function getFirstImagePath(): ?string
-    {
-        return $this->media[0]->getPath() ?? null;
+    public function getFirstMediaPath(): ?string
+{
+    foreach ($this->media as $media) {
+        if ($media->getPath()) {
+            return $media->getPath(); // ✅ Premier chemin valide
+        }
     }
+
+    return null; // Aucun média avec un chemin
+}
+
+public function __toString(): string
+{
+    return $this->name ?? 'Produit';
+}
+
+
+
 
 
     public function getId(): ?int

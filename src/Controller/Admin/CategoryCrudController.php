@@ -27,7 +27,6 @@ class CategoryCrudController extends AbstractCrudController
             TextEditorField::new('description'),
             AssociationField::new('media'),
             ImageField::new('media.path', 'Image')
-                ->setBasePath('/uploads/images/')
                 ->onlyOnIndex(),
         ];
     }
