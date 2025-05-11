@@ -6,6 +6,13 @@
 <div class="max-w-xl mx-auto px-4">
     <h1 class="text-3xl font-bold mb-4">{{ product.name }}</h1>
 
+    {% set firstMedia = product.medias|first %}
+    {% if firstMedia %}
+        <img src="{{ asset(firstMedia.path) }}"
+             alt="{{ firstMedia.alt }}"
+             class="w-full h-64 object-cover mb-6 rounded">
+    {% endif %}
+
     <p class="text-gray-600 mb-4">{{ product.description }}</p>
 
     <p class="text-xl font-bold mb-6">Prix : {{ product.price|number_format(2, '.', ' ') }} €</p>

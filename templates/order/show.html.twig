@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande {{ order.orderNumber }}{% endblock %}
+
+{% block body %}
+    <h1 class="text-2xl font-bold mb-6">Détails de la commande {{ order.orderNumber }}</h1>
+
+    <p class="mb-4 text-gray-600">
+        Passée le {{ order.dateTime|date('d/m/Y à H:i') }} —
+        Statut :
+        {% if order.valid %}
+            <span class="text-green-600 font-semibold">Validée</span>
+        {% else %}
+            <span class="text-yellow-600 font-semibold">En attente</span>
+        {% endif %}
+    </p>
+
+    {% if order.commandLines is empty %}
+        <p>Aucune ligne dans cette commande.</p>
+    {% else %}
+        <table class="table-auto w-full text-left border mb-6">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="p-2 border">Image</th>
+                    <th class="p-2 border">Produit</th>
+                    <th class="p-2 border">Taille</th>
+                    <th class="p-2 border">Quantité</th>
+                    <th class="p-2 border">Prix unitaire</th>
+                    <th class="p-2 border">Montant</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set total = 0 %}
+                {% for line in order.commandLines %}
+                    {% set product = line.product %}
+                    {% set total = total + (product.price * line.quantity) %}
+                    <tr>
+                        <td class="p-2 border">
+                            {% set media = product.medias|first %}
+                            {% if media %}
+                                <img src="{{ asset(media.path) }}" alt="{{ media.alt }}" class="w-16 h-16 object-cover rounded">
+                            {% endif %}
+                        </td>
+                        <td class="p-2 border">{{ product.name }}</td>
+                        <td class="p-2 border">{{ line.size.label }}</td>
+                        <td class="p-2 border">{{ line.quantity }}</td>
+                        <td class="p-2 border">{{ product.price|number_format(2, '.', ' ') }} €</td>
+                        <td class="p-2 border">{{ (product.price * line.quantity)|number_format(2, '.', ' ') }} €</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <p class="text-right text-lg font-bold">
+            Total de la commande : {{ total|number_format(2, '.', ' ') }} €
+        </p>
+    {% endif %}
+
+    <div class="mt-6">
+        <a href="{{ path('order_list') }}" class="text-blue-600 hover:underline">← Retour à mes commandes</a>
+    </div>
+{% endblock %}

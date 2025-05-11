@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Order;
 use App\Entity\CommandLine;
+use App\Entity\Product;
+use App\Entity\Size;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -31,9 +33,10 @@ class OrderController extends AbstractController
         $order->setOrderNumber(uniqid('CMD-'));
 
         foreach ($cart as $line) {
-            $product = $line['product'];
+            $product = $em->getRepository(Product::class)->find($line['product']->getId());
+            $size = $em->getRepository(Size::class)->find($line['size']->getId());
+
             $quantity = $line['quantity'];
-            $size = $line['size'] ?? null;
 
             $orderLine = new CommandLine();
             $orderLine->setProduct($product);
@@ -66,6 +69,19 @@ class OrderController extends AbstractController
 
         return $this->render('order/list.html.twig', [
             'orders' => $orders
+        ]);
+    }
+
+    #[Route('/order/{id}', name: 'order_show')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function show(Order $order): Response
+    {
+        if ($order->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException('Cette commande ne vous appartient pas.');
+        }
+
+        return $this->render('order/show.html.twig', [
+            'order' => $order,
         ]);
     }
 }

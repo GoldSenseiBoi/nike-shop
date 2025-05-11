@@ -124,7 +124,7 @@ class Product
     /**
      * @return Collection<int, Media>
      */
-    public function getMedia(): Collection
+    public function getMedias(): Collection
     {
         return $this->media;
     }
