@@ -40,6 +40,9 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Tailles', 'fas fa-ruler', Size::class);
         yield MenuItem::linkToCrud('Images', 'fas fa-image', Media::class);
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-users', User::class);
+        yield MenuItem::linkToCrud('Commandes', 'fas fa-receipt', \App\Entity\Order::class);
+
+
 
     }
 }
