@@ -31,7 +31,7 @@ class ProductCrudController extends AbstractCrudController
             BooleanField::new('available'),
             AssociationField::new('category'),
             AssociationField::new('sizes'),
-            ImageField::new('medias[0].path', 'Image')
+            ImageField::new('firstImagePath', 'Image')
                 ->setBasePath('/uploads/images/')
                 ->onlyOnIndex(),
         ];

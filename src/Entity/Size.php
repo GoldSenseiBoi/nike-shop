@@ -46,6 +46,12 @@ class Size
         return $this;
     }
 
+    public function __toString(): string
+    {
+        return $this->label; // ou label, ou getTaille(), selon ton champ principal
+    }
+
+
     /**
      * @return Collection<int, Product>
      */

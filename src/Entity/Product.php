@@ -56,6 +56,12 @@ class Product
         $this->sizes = new ArrayCollection();
     }
 
+    public function getFirstImagePath(): ?string
+    {
+        return $this->media[0]->getPath() ?? null;
+    }
+
+
     public function getId(): ?int
     {
         return $this->id;
