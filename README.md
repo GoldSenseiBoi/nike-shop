@@ -102,7 +102,7 @@ symfony server:start
 
 **Projet validé et conforme à 100% au cahier des charges.**
 
-Reste à déployer officiellement si ce n'est pas encore fait sur AlwaysData ou hébergeur équivalent.
+
 
 ---
 
