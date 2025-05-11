@@ -96,8 +96,7 @@ symfony server:start
 
 6. **Accéder au site** :
 
-* Front : [http://localhost:8000](http://localhost:8000)
-* Admin : [http://localhost:8000/admin](http://localhost:8000/admin)
+* en ligne : [https://www.projet-web-training.ovh/licence08/](https://www.projet-web-training.ovh/licence08/)
 
 ---
 
