@@ -50,10 +50,7 @@ Le projet est prévu pour être déployé sur un hébergement tel que AlwaysData
 * Upload d’images avec prévisualisation
 * Liaison entre produit et média automatique
 
-## 🌟 Bonus
 
-* Ajout automatique du type d'image ("image/jpeg")
-* Nettoyage des chemins d'image pour éviter les erreurs de doublons (/images/images/...)
 
 ---
 
